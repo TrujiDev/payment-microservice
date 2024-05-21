@@ -3,11 +3,13 @@ import * as joi from 'joi';
 
 interface EnvVars {
   PORT: number;
+  STRIPE_SECRET_KEY: string;
 }
 
 const envSchema = joi
   .object({
     PORT: joi.number().required(),
+    STRIPE_SECRET_KEY: joi.string().required(),
   })
   .unknown(true);
 
@@ -20,5 +22,6 @@ if (error) {
 const envVars: EnvVars = value;
 
 export const envs = {
-  PORT: envVars.PORT,
+  port: envVars.PORT,
+  stripeSecretKey: envVars.STRIPE_SECRET_KEY,
 };
