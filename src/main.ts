@@ -7,8 +7,8 @@ async function bootstrap() {
   const logger = new Logger('PaymentMicroservice');
 
   const app = await NestFactory.create(AppModule);
-  await app.listen(envs.PORT);
+  await app.listen(envs.port);
 
-  logger.log(`Payment Microservice Running on port ${envs.PORT}`);
+  logger.log(`Payment Microservice Running on port ${envs.port}`);
 }
 bootstrap();
