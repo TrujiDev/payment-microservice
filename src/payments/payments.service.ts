@@ -8,7 +8,7 @@ import { Request, Response } from 'express';
 export class PaymentsService {
   private readonly stripe = new Stripe(envs.stripeSecretKey);
 
-  createPaymentSession(paymentSessionDto: PaymentSessionDto) {
+  async createPaymentSession(paymentSessionDto: PaymentSessionDto) {
     const { currency, items, orderId } = paymentSessionDto;
 
     const line_items = items.map((item) => {
@@ -24,7 +24,7 @@ export class PaymentsService {
       };
     });
 
-    return this.stripe.checkout.sessions.create({
+    const session = await this.stripe.checkout.sessions.create({
       payment_intent_data: {
         metadata: {
           orderId: orderId,
@@ -36,6 +36,12 @@ export class PaymentsService {
       success_url: envs.successUrl,
       cancel_url: envs.cancelUrl,
     });
+
+    return {
+      cancelUrl: session.cancel_url,
+      successUrl: session.success_url,
+      url: session.url,
+    };
   }
 
   async stripeWebhook(req: Request, res: Response) {
